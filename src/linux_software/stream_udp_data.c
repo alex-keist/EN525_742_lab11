@@ -70,9 +70,6 @@ int main(int argc, char *argv[])
 	while (1){
 		unsigned int fifo_count = fifo[FIFO_COUNT_OFFSET / 4];
 		if (fifo_count >= 256){
-			for(int i=0; i<256; i++){
-				//read 256 samples into array and send as a packet?
-			}
 			//256 samples in fifo, send a packet
 			// zero everything first
 			memset(buffer, 0, PACKET_SIZE);
@@ -81,12 +78,11 @@ int main(int argc, char *argv[])
 			seq = seq++;
 			memcpy(buffer, &seq, sizeof(uint32_t));
 
-			// bytes 4-1027: 256 complex 16-bit samples: I, Q, I, Q...
 			for (int sample = 0; sample < 256; sample++) {
 				uint32_t word = fifo[FIFO_DATA_OFFSET / 4];
 
-				size_t offset = 4 + sample * 4;           // 4 bytes per complex sample
-				memcpy(&buffer[offset], &word, sizeof(uint32_t)); // Q
+				size_t offset = 4 + sample * 4;           
+				memcpy(&buffer[offset], &word, sizeof(uint32_t)); 
 			}
 
 			ssize_t sent = sendto(sockfd,

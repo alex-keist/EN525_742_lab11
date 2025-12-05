@@ -1,0 +1,6 @@
+run udpsender with args for destination address and number of packets
+check in wireshark and filter for 'udp.port == 25344' to capture the packets
+verify protocol is UDP, length is 1070, and destination port and ip are correct
+
+example command
+./udpsender 192.168.254.36 10
